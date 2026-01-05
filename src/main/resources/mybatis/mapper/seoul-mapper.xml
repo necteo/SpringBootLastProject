@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.sist.web.mapper.SeoulMapper">
+   <!-- 
+   		   while(rs.next())
+   		   {
+   		   	  SeoulVO vo=new SeoulVO();
+   		   	  vo.setTitle(rs.getString(1))
+   		   	  vo.getLvo().setMsg(rs.getString(2))
+   		   }
+    -->
+ 	 <select id="seoulListData" resultType="com.sist.web.vo.SeoulVO" parameterType="hashmap">
+ 	 	 SELECT no, contentid, title, address, image1, hit, contenttype
+ 	 	 FROM seoultravel
+ 	 	 WHERE contenttype = #{contenttype}
+ 	 	 ORDER BY no
+ 	 	 OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
+ 	 </select>
+ 	 
+ 	 <!-- 
+ 	  NO            NUMBER         
+		CONTENTID     NUMBER         
+		INFOCENTER    VARCHAR2(1024) 
+		RESTDATE      VARCHAR2(1024) 
+		USETIME       VARCHAR2(1024) 
+		PARKING       VARCHAR2(1024) 
+		MSG           CLOB
+ 	  -->
+ 	 <!-- 
+ 	 	NO          NOT NULL NUMBER         
+		TITLE                VARCHAR2(1024) 
+		IMAGE1               VARCHAR2(1024) 
+		IMAGE2               VARCHAR2(1024) 
+		X                    NUMBER(20,12)  위도  
+		Y                    NUMBER(20,12)  경도
+		CONTENTID            NUMBER         
+		ADDRESS              VARCHAR2(300)  
+		CONTENTTYPE          NUMBER(2)
+		
+		SELECT no,msg,parking ....
+					 SeoulVO vo=new SeoulVO()
+					 vo.setNO(값)
+					 vo.avo.setMsg(값)
+					 vo.avo.setParking(값)
+ 	  -->
+ 	 <resultMap type="com.sist.web.vo.SeoulVO" id="attMap">
+ 	   <result property="avo.infocenter" column="infocenter"/>
+ 	   <result property="avo.restdate" column="restdate"/>
+ 	   <result property="avo.usetime" column="usetime"/>
+ 	   <result property="avo.parking" column="parking"/>
+ 	   <result property="avo.msg" column="msg"/>
+ 	 </resultMap>
+ 	 <select id="seoulAttractionDetailData" resultMap="attMap" parameterType="int">
+ 	   SELECT s.no, title, image1, address, x, y, hit, 
+ 	   				infocenter, restdate, usetime, parking, msg
+ 	   FROM seoultravel s JOIN attraction a ON s.contentid = a.contentid
+ 	   WHERE s.contentid = #{contentid}
+ 	 </select>
+ 	 
+ 	 <update id="seoulHitIncrement" parameterType="int">
+ 	   UPDATE seoultravel
+ 	   SET hit = hit + 1
+ 	   WHERE contentid = #{contentid}
+ 	 </update>
+ </mapper>
