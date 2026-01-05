@@ -1,0 +1,24 @@
+#port => default 8080 => 보안 설정(AWS) : port 허용
+# 8080 / 1521 / 3306 (MySQL , MariaDB)
+# MVC 설정
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+  datasource:
+    url: jdbc:oracle:thin:@211.238.142.22:1521:XE
+    username: hr
+    password: happy
+    driver-class-name: oracle.jdbc.OracleDriver
+
+# MyBatis : 복잡한 SQL => Annotation / XML(JOIN,동적쿼리)
+# 프로시저 / 트리거 / 함수
+mybatis:
+  type-aliases-package: com.sist.web.vo
+  mapper-locations: mybatis/mapper/*.xml
+
+# JPA => JOIN => CRUD 
+# WebSocket 설정 / Kafka 설정 / MSA 설정
+# Security : 람다식
