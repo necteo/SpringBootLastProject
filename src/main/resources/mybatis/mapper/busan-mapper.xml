@@ -10,4 +10,54 @@
  	 	 ORDER BY no
  	 	 OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
  	 </select>
+ 	 
+ 	 <!-- 
+ 	 	 SELECT no, contentid, title, address, image1, hit, contenttype
+ 	 	 FROM 
+ 	 	 <if test="type == 1">
+ 	 	   seoultravel
+ 	 	 </if>
+ 	 	 <if test="type == 2">
+ 	 	   busantravel
+ 	 	 </if>
+ 	 	 <if test="type == 3">
+ 	 	   jejutravel
+ 	 	 </if>
+ 	 	 WHERE address LIKE '%' || #{address} || '%'
+ 	 	 ORDER BY no
+ 	 	 OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
+ 	 	 
+ 	 	 SELECT no, contentid, title, address, image1, hit, contenttype
+ 	 	 FROM ${table_name}
+ 	 	 WHERE address LIKE '%' || #{address} || '%'
+ 	 	 ORDER BY no
+ 	 	 OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
+ 	  -->
+ 	 <!-- 검색 -->
+ 	 <select id="busanFindData" resultType="com.sist.web.vo.BusanVO" parameterType="hashmap">
+ 	   SELECT no, contentid, title, address, image1, hit, contenttype
+ 	 	 FROM busantravel
+ 	 	 WHERE address LIKE '%' || #{address} || '%'
+ 	 	 ORDER BY no
+ 	 	 OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
+ 	 </select>
+ 	 <select id="busanFindTotalPage" resultType="int" parameterType="string">
+ 	   SELECT CEIL(COUNT(*) / 12)
+ 	 	 FROM busantravel
+ 	 	 WHERE address LIKE '%' || #{address} || '%'
+ 	 </select>
+ 	 
+ 	 <resultMap type="com.sist.web.vo.BusanVO" id="busanMap">
+ 	   <result column="usetime" property="avo.usetime"/>
+ 	   <result column="restdate" property="avo.restdate"/>
+ 	   <result column="parking" property="avo.parking"/>
+ 	 </resultMap>
+ 	 <select id="busanTop4Data" resultMap="busanMap">
+ 	 	 SELECT no, contentid, title, address, image1, hit, usetime, restdate, parking
+ 	 	 FROM (SELECT b.no, b.contentid, title, address, image1, hit, usetime, restdate, parking
+ 	 	 			 FROM busantravel b, attraction a
+ 	 	 			 WHERE b.contentid = a.contentid
+ 	 	 			 ORDER BY hit DESC)
+ 	 	 WHERE rownum &lt;= 4
+ 	 </select>
  </mapper>

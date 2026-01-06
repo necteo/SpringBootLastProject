@@ -45,4 +45,31 @@ public interface SeoulMapper {
 	 */
 	public void seoulHitIncrement(int contentid);
 	
+	/*
+	 *  <select id="seoulFindData" resultType="com.sist.web.vo.SeoulVO" parameterType="hashmap">
+	 	   SELECT no, contentid, title, address, image1, hit, contenttype
+	 	 	 FROM seoultravel
+	 	 	 WHERE address LIKE '%' || #{address} || '%'
+	 	 	 ORDER BY no
+	 	 	 OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
+	 	 </select>
+	 	 <select id="seoulFindTotalPage" resultType="int" parameterType="string">
+	 	   SELECT CEIL(COUNT(*) / 12)
+	 	 	 FROM seoultravel
+	 	 	 WHERE address LIKE '%' || #{address} || '%'
+	 	 </select>
+	 */
+	public List<SeoulVO> seoulFindData(Map<String, Object> map);
+	public int seoulFindTotalPage(String address);
+	
+	/*
+	 *   <select id="seoulTop5Data" resultType="com.sist.web.vo.SeoulVO">
+	 	 	 SELECT no, contentid, title, address, image1, hit
+	 	 	 FROM (SELECT no, contentid, title, address, image1, hit
+	 	 	 			 FROM seoultravel WHERE contenttype = 39 ORDER BY hit DESC)
+	 	 	 WHERE rownum &lt;= 5
+	 	 </select>
+	 */
+	public List<SeoulVO> seoulTop5Data();
+	
 }

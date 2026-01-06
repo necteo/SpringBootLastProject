@@ -15,7 +15,7 @@ import lombok.Data;
 	HIT                  NUMBER
  */
 @Data
-public class JejuVO {
+public class JejuVO implements VO {
 	
 	private int no, contentid, contenttype, hit;
 	private String title, image1, image2, address;

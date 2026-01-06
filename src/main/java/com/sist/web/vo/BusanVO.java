@@ -15,10 +15,11 @@ import lombok.Data;
 	HIT                  NUMBER
  */
 @Data
-public class BusanVO {
+public class BusanVO implements VO {
 
 	private int no, contentid, contenttype, hit;
 	private String title, image1, image2, address;
 	private double x, y;
+	private AttractionVO avo = new AttractionVO(); 
 
 }

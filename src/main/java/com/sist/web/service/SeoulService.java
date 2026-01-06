@@ -31,5 +31,7 @@ public interface SeoulService {
 	public List<SeoulVO> seoulListData(Map<String, Integer> map);
 	public int seoulTotalPage(int contenttype);
 	public SeoulVO seoulAttractionDetailData(int contentid);
+	public Map<String, Object> seoulFindData(int page, String address) throws Exception;
+	public List<SeoulVO> seoulTop5Data();
 
 }

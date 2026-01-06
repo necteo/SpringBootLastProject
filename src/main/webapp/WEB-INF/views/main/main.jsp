@@ -11,7 +11,7 @@
 	<!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 	<!-- Title -->
-	<title>Yummy Blog - Food Blog Template</title>
+	<title>SBJ Travel</title>
 
 	<!-- Favicon -->
 	<link rel="icon" href="/img/core-img/favicon.ico">
@@ -22,6 +22,11 @@
 	<!-- Responsive CSS -->
 	<link href="/css/responsive/responsive.css" rel="stylesheet">
 
+  <!-- Vue Pinia -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue-demi"></script>
+  <script src="https://unpkg.com/pinia@2/dist/pinia.iife.js"></script>
 </head>
 
 <body>
