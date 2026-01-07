@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.sist.web.commons.AddressSplitter;
 import com.sist.web.mapper.SeoulMapper;
 import com.sist.web.vo.SeoulVO;
 
@@ -45,10 +46,7 @@ public class SeoulServiceImpl implements SeoulService {
 		map.put("start", (page - 1) * 12);
 		map.put("address", address);
 		List<SeoulVO> list = mapper.seoulFindData(map);
-		for (SeoulVO vo : list) {
-			String[] addrs = vo.getAddress().split(" ");
-			vo.setAddress(addrs[0] + " " + addrs[1]);
-		}
+		AddressSplitter.splitAddress(list);
 		int totalpage = mapper.seoulFindTotalPage(address);
 		
 		final int BLOCK = 10;
