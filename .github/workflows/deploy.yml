@@ -1,5 +1,5 @@
 name: Deploy to Ubuntu Server
-
+#연동
 on:
   push:
     branches:
@@ -51,7 +51,7 @@ jobs:
 
     - name: Deploy to Server with rsync
       run: | 
-         rsync -avz -e "ssh -o StrictHostKeyChecking=no" build/libs/*.war ubuntu@52.91.141.41:~/app
+         rsync -avz -e "ssh -o StrictHostKeyChecking=no" build/libs/SpringBootLastProject-0.0.1-SNAPSHOT.war ubuntu@52.91.141.41:~/app
 
 
     - name: Run SSH commands
