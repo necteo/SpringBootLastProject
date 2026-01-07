@@ -3,15 +3,15 @@ name: Deploy to Ubuntu Server
 on:
   push:
     branches:
-      - main  # main branch에서 commit이 있는 경우
+      - main  # main 브랜치에 푸시될 때 트리거
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # 코드 체크 아웃
-    - name: Checkout Repository
+    # 코드 체크아웃
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     # JDK 17 설정
@@ -20,40 +20,43 @@ jobs:
       with:
         java-version: '17'
 
-    # gradle 권한 부여
-    - name: Setup Gradlew permissions
+    # gradlew 권한 설정
+    - name: Set gradlew permissions
       run: |
         chmod +x ./gradlew
 
-    # gradle build
+    # gradle 빌드
     - name: Build with Gradle
       run: ./gradlew build
-      
-    # SSH Key 설정 (ssh-agent 하나로 통합)
-    - name: Add SSH Key
-      uses: webfactory/ssh-agent@v0.9.0
+
+    - name: Set SSH key permissions
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+    - name: Add SSH key
+      uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
 
-    # 파일 전송 (목적지 폴더 명시)
-    - name: Deploy to Server with rsync
-      run: |
-        # 서버에 app 폴더가 없을 경우를 대비해 미리 생성 시도
-        ssh -o StrictHostKeyChecking=no ubuntu@52.91.141.41 "mkdir -p ~/app"
-        # 빌드된 war 파일을 서버의 ~/app/ 폴더로 전송
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no" build/libs/*.war ubuntu@52.91.141.41:~/app/
 
-    # 서버 명령 실행 (StrictHostKeyChecking 추가 및 스크립트 정정)
+    - name: Add known_hosts
+      run: |
+        ssh-keyscan -H rsa 52.91.141.41 >> ~/.ssh/known_hosts
+
+    #- name: 기존프로세스 종료
+    #  run: |
+    #    kill -9 $(ps -ef | grep devops | grep -v grep | head -n 1 | awk '{print $2}') || true
+
+    - name: Deploy to Server with rsync
+      run: | 
+         rsync -avz -e "ssh -o StrictHostKeyChecking=no" build/libs/*.war ubuntu@52.91.141.41:~/app
+
+
     - name: Run SSH commands
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@52.91.141.41 << 'EOF'
-          echo "--- 배포 스크립트 시작 ---"
-          # 1. 기존 실행 중인 자바 프로세스 종료
+        ssh -i ~/.ssh/id_rsa ubuntu@52.91.141.41 << 'EOF'
           pkill -f 'java -jar' || true
-          
-          # 2. 새로운 애플리케이션 실행 (경로 확인 필수)
-          # 파일명이 유동적일 수 있으므로 구체적인 이름을 적거나 와일드카드를 사용하세요.
-          nohup java -jar ~/app/SpringBootLastProject-0.0.1-SNAPSHOT.war > ~/app/log.txt 2>&1 &
-          
-          echo "--- 배포 완료 ---"
+          nohup java -jar ~/app/SpringBootLastProject-0.0.1-SNAPSHOT.war > log.txt 2>&1 &
         EOF
