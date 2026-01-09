@@ -71,4 +71,9 @@ public class SeoulServiceImpl implements SeoulService {
 		return mapper.seoulTop5Data();
 	}
 
+	@Override
+	public SeoulVO seoulFestivalDetailData(int contentid) {
+		return mapper.seoulFestivalDetailData(contentid);
+	}
+
 }

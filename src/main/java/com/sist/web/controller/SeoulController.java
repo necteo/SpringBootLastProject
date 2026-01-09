@@ -94,7 +94,7 @@ public class SeoulController {
 	
 	@GetMapping("detail")
 	public String seoul_detail(@RequestParam("cno") int cno, @RequestParam("type") int type, Model model) {
-		SeoulVO vo = new SeoulVO();
+		SeoulVO vo = null;
 		String jsp = "";
 		if (type == 12) {
 			vo = sService.seoulAttractionDetailData(cno);
@@ -102,6 +102,8 @@ public class SeoulController {
 		} else if (type == 14) {
 			jsp = "../seoul/culture.jsp";
 		} else if (type == 15) {
+			vo = sService.seoulFestivalDetailData(cno);
+			model.addAttribute("vo", vo);
 			jsp = "../seoul/festival.jsp";
 		} else if (type == 32) {
 			jsp = "../seoul/stay.jsp";
