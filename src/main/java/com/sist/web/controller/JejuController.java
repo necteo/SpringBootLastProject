@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/jeju/")
+@RequestMapping("/jeju")
 public class JejuController {
 	
 	private final JejuService jService;
 	
-	@GetMapping("list")
+	@GetMapping("/list")
 	public String jeju_list(
 			@RequestParam(name = "page", required = false) String page, 
 			@RequestParam("cno") int cno, Model model) {
@@ -28,7 +28,7 @@ public class JejuController {
 		return "main/main";
 	}
 	
-	@GetMapping("find")
+	@GetMapping("/find")
 	public String jeju_find(Model model) {
 		model.addAttribute("main_jsp", "../jeju/jeju_find.jsp");
 		return "main/main";

@@ -12,12 +12,12 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/busan/")
+@RequestMapping("/busan")
 public class BusanController {
 	
 	private final BusanService bService;
 	
-	@GetMapping("list")
+	@GetMapping("/list")
 	public String busan_list(
 			@RequestParam(name = "page", required = false) String page, 
 			@RequestParam("cno") int cno, Model model) {
@@ -26,7 +26,7 @@ public class BusanController {
 		return "main/main";
 	}
 	
-	@GetMapping("find")
+	@GetMapping("/find")
 	public String busan_find(Model model) {
 		model.addAttribute("main_jsp", "../busan/busan_find.jsp");
 		return "main/main";

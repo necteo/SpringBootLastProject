@@ -15,19 +15,19 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member/")
+@RequestMapping("/member")
 public class MemberController {
 	
 	private final BCryptPasswordEncoder encoder;
 	private final MemberService mService;
 	
-	@GetMapping("join")
+	@GetMapping("/join")
 	public String member_join(Model model) {
 		model.addAttribute("main_jsp", "../member/join.jsp");
 		return "main/main";
 	}
 	
-	@PostMapping("join_ok")
+	@PostMapping("/join_ok")
 	public String member_join_ok(@ModelAttribute("vo") MemberVO vo) {
 		vo.setPhone(vo.getPhone1() + "-" + vo.getPhone2());
 		vo.setUserpwd(encoder.encode(vo.getUserpwd()));
@@ -37,7 +37,7 @@ public class MemberController {
 		return "redirect:/main";
 	}
 	
-	@RequestMapping("login")
+	@RequestMapping("/login")
 	public String member_login(Model model) {
 		model.addAttribute("main_jsp", "../member/login.jsp");
 		return "main/main";

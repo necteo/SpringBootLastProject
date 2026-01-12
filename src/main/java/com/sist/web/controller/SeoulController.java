@@ -24,12 +24,12 @@ import lombok.RequiredArgsConstructor;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/seoul/")
+@RequestMapping("/seoul")
 public class SeoulController {
 	
 	private final SeoulService sService;
 	
-	@GetMapping("list")
+	@GetMapping("/list")
 	public String seoul_list(
 			@RequestParam(name = "page", required = false) String page, 
 			@RequestParam("cno") int cno, Model model) {
@@ -78,7 +78,7 @@ public class SeoulController {
 	 * 	 sendRedirect : RedirectAttributes
 	 * 	 forward : Model (HttpServletRequest)
 	 */
-	@GetMapping("detail_before")
+	@GetMapping("/detail_before")
 	public String seoul_detail_before(
 			@RequestParam("contentid") int contentid, @RequestParam("contenttype") int contenttype, 
 			HttpServletResponse response, RedirectAttributes ra) {
@@ -92,7 +92,7 @@ public class SeoulController {
 		return "redirect:detail";
 	}
 	
-	@GetMapping("detail")
+	@GetMapping("/detail")
 	public String seoul_detail(@RequestParam("cno") int cno, @RequestParam("type") int type, Model model) {
 		SeoulVO vo = null;
 		String jsp = "";
@@ -118,7 +118,7 @@ public class SeoulController {
 	}
 	
 	// 화면 이동 => 데이터처리 (RestController)
-	@GetMapping("find")
+	@GetMapping("/find")
 	public String seoul_find(Model model) {
 		model.addAttribute("main_jsp", "../seoul/seoul_find.jsp");
 		return "main/main";
