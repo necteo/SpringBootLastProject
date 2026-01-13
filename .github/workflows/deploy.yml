@@ -43,7 +43,7 @@ jobs:
 
     - name: Add known_hosts
       run: |
-        ssh-keyscan -H rsa 52.91.141.41 >> ~/.ssh/known_hosts
+        ssh-keyscan -H rsa 54.198.174.63 >> ~/.ssh/known_hosts
 
     #- name: 기존프로세스 종료
     #  run: |
@@ -51,12 +51,12 @@ jobs:
 
     - name: Deploy to Server with rsync
       run: | 
-         rsync -avz -e "ssh -o StrictHostKeyChecking=no" build/libs/SpringBootLastProject-0.0.1-SNAPSHOT.war ubuntu@52.91.141.41:~/app
+         rsync -avz -e "ssh -o StrictHostKeyChecking=no" build/libs/SpringBootLastProject-0.0.1-SNAPSHOT.war ubuntu@54.198.174.63:~/app
 
 
     - name: Run SSH commands
       run: |
-        ssh -i ~/.ssh/id_rsa ubuntu@52.91.141.41 << 'EOF'
+        ssh -i ~/.ssh/id_rsa ubuntu@54.198.174.63 << 'EOF'
           pkill -f 'java -jar' || true
           nohup java -jar ~/app/SpringBootLastProject-0.0.1-SNAPSHOT.war > log.txt 2>&1 &
         EOF
