@@ -98,11 +98,16 @@ public class SeoulController {
 		String jsp = "";
 		if (type == 12) {
 			vo = sService.seoulAttractionDetailData(cno);
+			String[] addrs=vo.getAddress().split(" ");
+			model.addAttribute("addr", addrs[1].trim());
+			model.addAttribute("vo", vo);
 			jsp = "../seoul/attraction.jsp";
 		} else if (type == 14) {
 			jsp = "../seoul/culture.jsp";
 		} else if (type == 15) {
 			vo = sService.seoulFestivalDetailData(cno);
+			String[] addrs=vo.getAddress().split(" ");
+			model.addAttribute("addr", addrs[1].trim());
 			model.addAttribute("vo", vo);
 			jsp = "../seoul/festival.jsp";
 		} else if (type == 32) {

@@ -106,6 +106,12 @@ public class BoardServiceImpl implements BoardService, BoardRelpyService {
 		bMapper.boardReplyDelete(no);
 		return commonsData(bno);
 	}
+
+	@Override
+	public Map<String, Object> boardReplyUpdate(BoardReplyVO vo) {
+		bMapper.boardReplyUpdate(vo);
+		return commonsData(vo.getBno());
+	}
 	
 	public Map<String, Object> commonsData(int bno) {
 		List<BoardReplyVO> list = bMapper.boardReplyListData(bno);
@@ -117,5 +123,4 @@ public class BoardServiceImpl implements BoardService, BoardRelpyService {
 		map.put("count", count);
 		return map;
 	}
-
 }

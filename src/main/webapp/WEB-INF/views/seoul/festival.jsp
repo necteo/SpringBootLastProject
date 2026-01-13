@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesSheet" href="/css/map.css" type="text/css">
 </head>
 <body>
 	<!-- ****** Breadcumb Area Start ****** -->
@@ -79,6 +80,32 @@
 						<tr>
 							<td class="text-right">
 								<a href="javascript:history.back()" class="btn btn-sm btn-danger">목록</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table">
+					<tbody>
+						<tr>
+							<td class="text-center">
+								<div class="map_wrap">
+							    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+							    <div id="menu_wrap" class="bg_white">
+						        <div class="option">
+					            <div>
+				                <form onsubmit="searchPlaces(); return false;">
+			                    키워드 : <input type="text" value="강남구 맛집" id="keyword" size="15"> 
+			                    <button type="submit">검색하기</button> 
+				                </form>
+					            </div>
+						        </div>
+						        <hr>
+						        <ul id="placesList"></ul>
+						        <div id="pagination"></div>
+							    </div>
+								</div>
+								<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cbbd5d669a90ce360aaa6cf764e5bfb&libraries=services"></script>
+								<script src="/vue/map.js"></script>
 							</td>
 						</tr>
 					</tbody>

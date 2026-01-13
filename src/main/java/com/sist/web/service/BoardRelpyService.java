@@ -11,5 +11,7 @@ public interface BoardRelpyService {
 	public Map<String, Object> boardReplyInsert(BoardReplyVO vo);
 	
 	public Map<String, Object> boardReplyDelete(int bno, int no);
+	
+	public Map<String, Object> boardReplyUpdate(BoardReplyVO vo);
 
 }
