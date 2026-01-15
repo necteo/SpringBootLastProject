@@ -1,62 +1,62 @@
-name: Deploy to Ubuntu Server
+# Git Action Deploy
+name: Deploy with Docker to Ubuntu Server
 #연동
 on:
-  push:
-    branches:
-      - main  # main 브랜치에 푸시될 때 트리거
+    push:
+        branches:
+            - main # main 브랜치에 푸시될 때 트리거 (Commit/Push)
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest # ubuntu 최종버전
 
-    steps:
-    # 코드 체크아웃
-    - name: Checkout repository
-      uses: actions/checkout@v2
+        steps:
+            # 코드 체크아웃
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
-    # JDK 17 설정
-    - name: Set up JDK 17
-      uses: actions/setup-java@v1
-      with:
-        java-version: '17'
+            # JDK 17 설정
+            - name: Set up JDK 17
+              uses: actions/setup-java@v3
+              with:
+                  distribution: "temurin"
+                  java-version: "17"
 
-    # gradlew 권한 설정
-    - name: Set gradlew permissions
-      run: |
-        chmod +x ./gradlew
+            # gradlew 권한 설정
+            - name: Set gradlew permissions
+              run: chmod +x ./gradlew
 
-    # gradle 빌드
-    - name: Build with Gradle
-      run: ./gradlew build
+            # gradle 빌드
+            - name: Build with Gradle
+              run: ./gradlew clean build
+              # war 파일 생성 = clean 전체 삭제 => 다시 build
 
-    - name: Set SSH key permissions
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+            - name: Login to DockerHub
+              run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-    - name: Add SSH key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+            - name: Build and Push Docker Image
+              run: |
+                  docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-app:latest .
+                  docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-app:latest
 
+            # SSH : 암호화 통신 => 개인키(id_ed25519)를 가지고 AWS에 접속
+            - name: Add SSH key
+              uses: webfactory/ssh-agent@v0.5.3
+              with:
+                  ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+            # 등록 => 서버키 등록
 
-    - name: Add known_hosts
-      run: |
-        ssh-keyscan -H rsa 54.198.174.63 >> ~/.ssh/known_hosts
+            - name: Add known_hosts
+              run: ssh-keyscan -t ed25519 3.88.1.208 >> ~/.ssh/known_hosts
 
-    #- name: 기존프로세스 종료
-    #  run: |
-    #    kill -9 $(ps -ef | grep devops | grep -v grep | head -n 1 | awk '{print $2}') || true
-
-    - name: Deploy to Server with rsync
-      run: | 
-         rsync -avz -e "ssh -o StrictHostKeyChecking=no" build/libs/SpringBootLastProject-0.0.1-SNAPSHOT.war ubuntu@54.198.174.63:~/app
-
-
-    - name: Run SSH commands
-      run: |
-        ssh -i ~/.ssh/id_rsa ubuntu@54.198.174.63 << 'EOF'
-          pkill -f 'java -jar' || true
-          nohup java -jar ~/app/SpringBootLastProject-0.0.1-SNAPSHOT.war > log.txt 2>&1 &
-        EOF
+            # 실행
+            # 정지 => docker stop image명
+            # 삭제 => docker rm image명
+            - name: Deploy on Server using DockerHub image
+              run: |
+                  ssh ubuntu@3.88.1.208 << 'EOF'
+                    sudo docker stop spring-app || true
+                    sudo docker rm spring-app || true
+                    sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-app:latest
+                    sudo docker run --name spring-app -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-app:latest
+                  EOF
