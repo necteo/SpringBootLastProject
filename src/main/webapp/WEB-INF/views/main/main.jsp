@@ -20,8 +20,8 @@
 	<link href="/style.css" rel="stylesheet">
 
 	<!-- Responsive CSS -->
-	<link href="/css/responsive/responsive.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link href="/css/responsive/responsive.css" rel="stylesheet">
 
   <!-- Vue Pinia -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
