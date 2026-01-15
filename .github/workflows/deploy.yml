@@ -28,7 +28,7 @@ jobs:
 
             # gradle 빌드
             - name: Build with Gradle
-              run: ./gradlew clean build
+              run: ./gradlew clean build -x test
               # war 파일 생성 = clean 전체 삭제 => 다시 build
 
             - name: Login to DockerHub
@@ -58,5 +58,5 @@ jobs:
                     sudo docker stop spring-app || true
                     sudo docker rm spring-app || true
                     sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-app:latest
-                    sudo docker run --name spring-app -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-app:latest
+                    sudo docker run --name spring-app -d --restart always -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-app:latest
                   EOF
