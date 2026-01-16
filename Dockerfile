@@ -1,16 +1,16 @@
 # Build
-FROM eclipse-temurin:17-jdk AS build
-WORKDIR /app
+# FROM eclipse-temurin:17-jdk AS build
+# WORKDIR /app
 
 # Copy
-COPY gradle .
-COPY gradle gradle
-COPY gradlew build.gradle settings.gradle ./
-RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
+# COPY gradle .
+# COPY gradle gradle
+# COPY gradlew build.gradle settings.gradle ./
+# RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
 
 # 소스
-COPY src src
-RUN ./gradlew build -x test --no-daemon
+# COPY src src
+# RUN ./gradlew build -x test --no-daemon
 # jdk 17기반의 이미지 사용
 FROM eclipse-temurin:17-jdk
 # 작업 디렉토리 설정

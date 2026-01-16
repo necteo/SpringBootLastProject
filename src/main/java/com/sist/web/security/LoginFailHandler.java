@@ -48,11 +48,11 @@ public class LoginFailHandler implements AuthenticationFailureHandler {
 			}*/
 			
 			if (exception instanceof BadCredentialsException) {
-				errorMsg = "아이디나 비밀번호가 틀립니다!!";
+				errorMsg = "아이디나 비밀번호가 틀립니다!!!";
 			} else if (exception instanceof InternalAuthenticationServiceException) {
-				errorMsg = "아이디나 비밀번호가 틀립니다!!";
+				errorMsg = "아이디나 비밀번호가 틀립니다!!!";
 			} else if (exception instanceof DisabledException) {
-				errorMsg = "휴면 계정입니다!!";
+				errorMsg = "휴면 계정입니다!!!";
 			}
 		} catch (Exception e) { }
 		request.setAttribute("message", errorMsg);
