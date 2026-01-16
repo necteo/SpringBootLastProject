@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class CommonsReplyServiceImpl implements CommonsReplyService {
 	
 	private final CommonsReplyMapper mapper;
-	private final String[] tbl_name = {"", "seoultravel", "busantravel", "jejutravel"};
+//	private final String[] tbl_name = {"", "seoultravel", "busantravel", "jejutravel"};
 	private final int ROW_SIZE = 10;
 	private final int BLOCK = 5;
 	
