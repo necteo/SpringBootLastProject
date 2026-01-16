@@ -16,7 +16,7 @@ FROM eclipse-temurin:17-jdk
 # 작업 디렉토리 설정
 WORKDIR /app
 # 빌드된 jar 파일 복사
-COPY --from=build /app/build/libs/*-0.0.1-SNAPSHOT.war  app.war
+COPY /app/build/libs/*-0.0.1-SNAPSHOT.war  app.war
 # PORT 열기
 EXPOSE 8080
 # 실행
