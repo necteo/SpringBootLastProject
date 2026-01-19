@@ -15,7 +15,7 @@ import com.sist.web.vo.CommonsReplyVo;
 public interface CommonsReplyMapper {
 	
 	@Select("SELECT no, cno, id, name, msg, sex, TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS') dbday, "
-		  + "group_tab "
+		  + "group_tab, group_id "
 		  + "FROM commonsReply_3 "
 		  + "WHERE cno = #{cno} "
 		  + "ORDER BY group_id DESC, group_step "
@@ -32,7 +32,7 @@ public interface CommonsReplyMapper {
 		  + "(SELECT NVL(MAX(group_id) + 1, 1) FROM commonsReply_3))")
 	public void commonsReplyInsert(CommonsReplyVo vo);
 	
-	@Select("SELECT root, depth FROM commonsReply_3 "
+	@Select("SELECT root, depth, group_id, group_step FROM commonsReply_3 "
 		  + "WHERE no = #{no}")
 	public CommonsReplyVo commonsInfoData(int no);
 	
@@ -41,12 +41,34 @@ public interface CommonsReplyMapper {
 		  + "WHERE no = #{no}")
 	public void commonsMsgUpdate(CommonsReplyVo vo);
 	
+	@Delete("DELETE FROM commonsReply_3 WHERE group_id = #{group_id}")
+	public void commonsAllDelete(int group_id);
+
 	@Delete("DELETE FROM commonsReply_3 WHERE no = #{no}")
-	public void commonsDelete(int no);
+	public void commonsMyDelete(int no);
 	
 	@Update("UPDATE commonsReply_3 "
 		  + "SET depth = depth - 1 "
 		  + "WHERE no = #{no}")
 	public void commonsDepthDecrement(int no);
-
+	
+	@Select("SELECT group_id, group_step, group_tab "
+		  + "FROM commonsReply_3 "
+		  + "WHERE no = #{no}")
+	public CommonsReplyVo commonsReplyParentData(int no);
+	
+	@Update("UPDATE commonsReply_3 "
+		  + "SET group_step = group_step + 1 "
+		  + "WHERE group_id = #{group_id} AND group_step > #{group_step}")
+	public void commonsGroupStepIncrement(CommonsReplyVo vo);
+	
+	@Insert("INSERT INTO commonsReply_3 "
+		  + "VALUES(cs3_no_seq.nextval, #{cno}, #{id}, #{name}, #{sex}, #{msg}, "
+		  + "#{group_id}, #{group_step}, #{group_tab}, #{root}, 0, SYSDATE)")
+	public void commonsReplyReplyInsert(CommonsReplyVo vo);
+	
+	@Update("UPDATE commonsReply_3 "
+		  + "SET depth = depth + 1 "
+		  + "WHERE no = #{no}")
+	public void commonsDepthIncrement(int no);
 }

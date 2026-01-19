@@ -92,4 +92,21 @@ public interface SeoulMapper {
 		  + "AND s.contentid = #{contentid}")
 	public SeoulVO seoulFestivalDetailData(int contentid);
 	
+	@Results({
+		@Result(property = "fsvo.firstmenu", column = "firstmenu"),
+		@Result(property = "fsvo.treatmenu", column = "treatmenu"),
+		@Result(property = "fsvo.infocenter", column = "infocenter"),
+		@Result(property = "fsvo.parking", column = "parking"),
+		@Result(property = "fsvo.opendate", column = "opendate"),
+		@Result(property = "fsvo.opentime", column = "opentime"),
+		@Result(property = "fsvo.restdate", column = "restdate"),
+		@Result(property = "fsvo.msg", column = "msg")
+	})
+	@Select("SELECT f.no, image1, x, y, title, address, "
+		  + "firstmenu, treatmenu, infocenter, parking, opendate, opentime, restdate, msg "
+		  + "FROM seoultravel s, foodstore f "
+		  + "WHERE s.contentid = f.contentid "
+		  + "AND s.contentid = #{contentid}")
+	public SeoulVO seoulFoodStoreDetailData(int contentid);
+	
 }

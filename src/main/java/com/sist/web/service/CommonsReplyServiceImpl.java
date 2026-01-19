@@ -78,16 +78,47 @@ public class CommonsReplyServiceImpl implements CommonsReplyService {
 	@Transactional(rollbackFor = Exception.class)
 	public Map<String, Object> commonsDelete(int no, int page, int cno) {
 		CommonsReplyVo vo = mapper.commonsInfoData(no);
-		if (vo.getDepth() == 0) {
-			mapper.commonsDelete(no);
+		if (vo.getGroup_step() == 0) {
+			mapper.commonsAllDelete(vo.getGroup_id());
 		} else {
-			CommonsReplyVo rvo = new CommonsReplyVo();
-			rvo.setNo(no);
-			rvo.setMsg("관리자에 의해 삭제된 댓글입니다");
-			mapper.commonsMsgUpdate(rvo);
+			if (vo.getDepth() == 0) {
+				mapper.commonsMyDelete(no);
+			} else {
+				CommonsReplyVo rvo = new CommonsReplyVo();
+				rvo.setNo(no);
+				rvo.setMsg("관리자에 의해 삭제된 댓글입니다");
+				mapper.commonsMsgUpdate(rvo);
+			}
+			mapper.commonsDepthDecrement(vo.getRoot());
 		}
-		mapper.commonsDepthDecrement(vo.getRoot());
 		return commonsData(page, cno);
+	}
+
+	@Override
+	public Map<String, Object> commonsMsgUpdate(CommonsReplyVo vo) {
+		mapper.commonsMsgUpdate(vo);
+		return commonsData(vo.getPage(), vo.getCno());
+	}
+
+	/*
+	 * 	  aaaaa
+	 * 		= ddddd
+	 * 		= bbbbb
+	 * 		= ccccc
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> commonsReplyReplyInsert(CommonsReplyVo vo) {
+		int pno = vo.getNo();
+		CommonsReplyVo pvo = mapper.commonsReplyParentData(pno);
+		mapper.commonsGroupStepIncrement(pvo);
+		vo.setGroup_id(pvo.getGroup_id());
+		vo.setGroup_step(pvo.getGroup_step() + 1);
+		vo.setGroup_tab(pvo.getGroup_tab() + 1);
+		vo.setRoot(pno);
+		mapper.commonsReplyReplyInsert(vo);
+		mapper.commonsDepthIncrement(pno);
+		return commonsData(vo.getPage(), vo.getCno());
 	}
 
 }

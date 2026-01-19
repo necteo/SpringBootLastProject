@@ -34,5 +34,6 @@ public interface SeoulService {
 	public Map<String, Object> seoulFindData(int page, String address) throws Exception;
 	public List<SeoulVO> seoulTop5Data();
 	public SeoulVO seoulFestivalDetailData(int contentid);
+	public SeoulVO seoulFoodStoreDetailData(int contentid);
 
 }

@@ -1,6 +1,5 @@
 package com.sist.web.restcontroller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -8,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,6 +60,33 @@ public class CommonsReplyRestController {
 		Map<String, Object> map = null;
 		try {
 			map = cService.commonsDelete(no, page, cno);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+
+	@PutMapping("/update_vue")
+	public ResponseEntity<Map<String, Object>> commons_update_vue(@RequestBody CommonsReplyVo vo) {
+		Map<String, Object> map = null;
+		try {
+			map = cService.commonsMsgUpdate(vo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	
+	@PostMapping("/reply_reply_insert_vue")
+	public ResponseEntity<Map<String, Object>> commons_reply_reply(@RequestBody CommonsReplyVo vo, HttpSession session) {
+		Map<String, Object> map = null;
+		try {
+			vo.setId((String) session.getAttribute("userid"));
+			vo.setName((String) session.getAttribute("username"));
+			vo.setSex((String) session.getAttribute("sex"));
+			map = cService.commonsReplyReplyInsert(vo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);

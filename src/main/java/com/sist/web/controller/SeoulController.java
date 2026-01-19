@@ -115,6 +115,10 @@ public class SeoulController {
 		} else if (type == 38) {
 			jsp = "../seoul/shopping.jsp";
 		} else if (type == 39) {
+			vo = sService.seoulFoodStoreDetailData(cno);
+			String[] addrs=vo.getAddress().split(" ");
+			model.addAttribute("addr", addrs[1].trim());
+			model.addAttribute("vo", vo);
 			jsp = "../seoul/food_store.jsp";
 		}
 		model.addAttribute("vo", vo);
