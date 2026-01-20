@@ -28,7 +28,7 @@ public class MyPageRestController {
 			String id = (String) session.getAttribute("userid");
 			list = rService.reserveMyData(id);
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
