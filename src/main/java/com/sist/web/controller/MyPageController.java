@@ -9,9 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/mypage")
 public class MyPageController {
 	
-	@GetMapping("/mypage_main")
+	@GetMapping("/mypage-main")
 	public String mypage_main(Model model) {
 		model.addAttribute("mypage_jsp", "../mypage/mypage_home.jsp");
+		model.addAttribute("main_jsp", "../mypage/mypage_main.jsp");
+		return "main/main";
+	}
+	
+	@GetMapping("/mypage-reserve")
+	public String mypage_reserve(Model model) {
+		model.addAttribute("mypage_jsp", "../mypage/mypage_reserve.jsp");
 		model.addAttribute("main_jsp", "../mypage/mypage_main.jsp");
 		return "main/main";
 	}

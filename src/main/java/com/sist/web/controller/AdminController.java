@@ -9,9 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 	
-	@GetMapping("/admin_main")
+	@GetMapping("/admin-main")
 	public String admin_main(Model model) {
 		model.addAttribute("admin_jsp", "../admin/admin_home.jsp");
+		model.addAttribute("main_jsp", "../admin/admin_main.jsp");
+		return "main/main";
+	}
+	
+	@GetMapping("/admin-reserve")
+	public String admin_reserve(Model model) {
+		model.addAttribute("admin_jsp", "../admin/admin_reserve.jsp");
 		model.addAttribute("main_jsp", "../admin/admin_main.jsp");
 		return "main/main";
 	}
