@@ -146,7 +146,7 @@
 										aria-haspopup="true" aria-expanded="false">커뮤니티</a>
 									<div class="dropdown-menu" aria-labelledby="yummyDropdown">
 										<a class="dropdown-item" href="/board/list">자유게시판</a>
-										<a class="dropdown-item" href="archive.html">공지사항</a>
+										<a class="dropdown-item" href="/notice/list">공지사항</a>
 										<sec:authorize access="isAuthenticated()">
 											<a class="dropdown-item" href="single.html">일대일채팅</a>
 											<a class="dropdown-item" href="static.html">그룹채팅</a>

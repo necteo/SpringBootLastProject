@@ -5,6 +5,69 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* Toast 박스 */
+.toast {
+  width: 320px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+/* 보여질 때 */
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Header */
+.toast-header {
+  background: #28a745; /* success */
+  color: white;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 제목 */
+.toast-title {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* 닫기 버튼 */
+.toast-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Body */
+.toast-body {
+  padding: 14px;
+  font-size: 14px;
+  color: #333;
+}
+</style>
+<script type="text/javascript">
+const ID = '${ sessionScope.userid }'
+</script>
 </head>
 <body>
 	<table class="table">
@@ -40,12 +103,65 @@
 					<td class="text-center">{{ vo.rinwon }}</td>
 					<td class="text-center">{{ vo.dbday }}</td>
 					<td class="text-center">
-						<button class="btn-xs btn-info">{{ vo.isReserve === 0 ? '예약대기' : '예약완료' }}</button>
-						<button class="btn-xs btn-warning" style="margin-left: 2px">취소</button>
+						<button class="btn-xs btn-info" v-if="vo.isReserve === 0">예약대기</button>
+						<button class="btn-xs btn-success" v-else @click="store.reserveDetail(vo.no)">예약완료</button>
+						<button class="btn-xs btn-warning" style="margin-left: 2px" v-if="vo.isCancel === 0"
+							@click="store.reserveRequest(vo.no)">취소요청</button>
+						<span class="btn btn-xs btn-default" style="margin-left: 2px" v-else>취소대기</span>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+		<div v-if="store.show">
+			<table class="table">
+				<tbody>
+					<tr>
+						<th colspan="8"><h3>예약정보</h3></th>
+					</tr>
+					<tr>
+						<th class="text-center">예약번호</th>
+						<td class="text-center">{{ store.reserve_detail.no }}</td>
+						<th class="text-center">예약일</th>
+						<td class="text-center">{{ store.reserve_detail.rday }}</td>
+						<th class="text-center">예약시간</th>
+						<td class="text-center">{{ store.reserve_detail.rtime }}</td>
+						<th class="text-center">예약인원</th>
+						<td class="text-center">{{ store.reserve_detail.rinwon }}</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table">
+				<tbody>
+					<tr>
+						<th><h3>맛집정보</h3></th>
+					</tr>
+					<tr>
+						<td width="30%" class="text-center" rowspan="8">
+							<img :src="store.reserve_detail.svo.image1" style="width: 100%; height: 120px">
+						</td>
+						<td colspan="2"><h3>{{ store.reserve_detail.svo.title }}</h3></td>
+					</tr>
+					<tr>
+						<td width="15%" class="text-center">주소</td>
+						<td width="55%">{{ store.reserve_detail.svo.address }}</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="text-right">
+							<button class="btn-sm btn-warning" @click="store.show = false">닫기</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="toast-container">
+		  <div id="reserveToast" class="toast">
+		    <div class="toast-header">
+		      <strong class="toast-title">예약 알림</strong>
+		      <button class="toast-close" onclick="hideToast()">×</button>
+		    </div>
+		    <div class="toast-body" id="toastMsg"></div>
+		  </div>
+		</div>
 	</div>
 	<script src="/vue/axios.js"></script>
 	<script src="/vue/reserve/mypageStore.js"></script>
@@ -59,6 +175,7 @@
 				
 				onMounted(() => {
 					store.dataRecv()
+					store.connect(ID)
 				})
 				
 				return {

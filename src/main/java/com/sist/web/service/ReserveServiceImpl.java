@@ -87,4 +87,24 @@ public class ReserveServiceImpl implements ReserveService {
 		return mapper.reserveAdminData();
 	}
 
+	@Override
+	public void reserveOk(int no) {
+		mapper.reserveOk(no);
+	}
+
+	@Override
+	public void reserveCancel(int no) {
+		mapper.reserveCancel(no);
+	}
+
+	@Override
+	public void reserveDelete(int no) {
+		mapper.reserveDelete(no);
+	}
+
+	@Override
+	public ReserveVO reserveDetailData(int no) {
+		return mapper.reserveDetailData(no);
+	}
+
 }

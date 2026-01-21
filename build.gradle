@@ -44,6 +44,7 @@ dependencies {
 	implementation 'jakarta.servlet:jakarta.servlet-api'
 	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
 	/*implementation 'org.springframework.ai:spring-ai-starter-model-google-genai:1.1.2'*/
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
