@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 public class CommonsReplyServiceImpl implements CommonsReplyService {
 	
 	private final CommonsReplyMapper mapper;
+	private final SimpMessagingTemplate template;
 //	private final String[] tbl_name = {"", "seoultravel", "busantravel", "jejutravel"};
 	private final int ROW_SIZE = 10;
 	private final int BLOCK = 5;
@@ -118,6 +120,13 @@ public class CommonsReplyServiceImpl implements CommonsReplyService {
 		vo.setRoot(pno);
 		mapper.commonsReplyReplyInsert(vo);
 		mapper.commonsDepthIncrement(pno);
+		String pid = pvo.getId();
+		if (!pid.equals(vo.getId())) {
+			template.convertAndSend(
+				"/sub/notice/"+pid,
+				"[🎉댓글 알림] 답글이 달렸습니다!!"
+			);
+		}
 		return commonsData(vo.getPage(), vo.getCno());
 	}
 

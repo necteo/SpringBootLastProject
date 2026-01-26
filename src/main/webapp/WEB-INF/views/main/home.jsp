@@ -241,15 +241,18 @@
 						<!-- Single Widget Area -->
 						<div class="single-widget-area newsletter-widget">
 							<div class="widget-title text-center">
-								<h6>Newsletter</h6>
+								<h6>실시간 인기 검색어</h6>
 							</div>
-							<p>Subscribe our newsletter gor get notification about new updates, information discount, etc.</p>
-							<div class="newsletter-form">
+              <c:forEach var="rvo" items="${rList }" varStatus="s">
+	              <p>${s.index+1}.${rvo.word}</p>
+              </c:forEach>
+                            
+							<%--<div class="newsletter-form">
 								<form action="#" method="post">
 									<input type="email" name="newsletter-email" id="email" placeholder="Your email">
 									<button type="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
 								</form>
-							</div>
+							</div>--%>
 						</div>
 					</div>
 				</div>

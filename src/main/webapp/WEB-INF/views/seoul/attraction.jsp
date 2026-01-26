@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesSheet" href="/css/map.css" type="text/css">
+<link rel="stylesheet" href="/css/toast.css">
 <script>
 const SESSION_ID = '${ sessionScope.userid }'
 const CNO = '${ param.cno }'
@@ -234,6 +235,7 @@ const CNO = '${ param.cno }'
 							</div>
 						</div>
 					</div>
+					<jsp:include page="../commons/toast.jsp"></jsp:include>
 				</div>
 				<script>
 					const { createApp, onMounted, ref } = Vue
@@ -247,6 +249,7 @@ const CNO = '${ param.cno }'
 							onMounted(() => {
 								store.sessionId = SESSION_ID
 								store.commonsListData(CNO)
+								store.connect(SESSION_ID)
 							})
 							
 							return {

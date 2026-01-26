@@ -52,7 +52,7 @@ public interface CommonsReplyMapper {
 		  + "WHERE no = #{no}")
 	public void commonsDepthDecrement(int no);
 	
-	@Select("SELECT group_id, group_step, group_tab "
+	@Select("SELECT id, group_id, group_step, group_tab "
 		  + "FROM commonsReply_3 "
 		  + "WHERE no = #{no}")
 	public CommonsReplyVo commonsReplyParentData(int no);
